@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อสอบออนไลน์ ปวช.: การทำงานเป็นทีมและความยั่งยืน (จำกัดเวลา & ไม่แสดงเฉลย)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts (Sarabun) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f0ebf8; /* Google Forms classic light purple background */
+      user-select: none; /* Anti-copy: Prevents text selection */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    .google-forms-header {
+      border-top: 10px solid #673ab7; /* Google Forms purple header accent */
+    }
+  </style>
+</head>
+<body class="py-4 md:py-8 px-2 md:px-4 text-gray-800 pb-24">
+
+  <!-- STICKY TIMER BAR (Shows at top when test is running) -->
+  <div id="sticky-timer-bar" class="fixed top-0 left-0 w-full bg-red-600 text-white text-center py-2.5 font-bold z-40 hidden shadow-md flex items-center justify-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span class="text-sm md:text-base">เวลาทำข้อสอบคงเหลือ: <span id="countdown-timer" class="font-mono text-lg md:text-xl">20:00</span> นาที</span>
+  </div>
+
+  <div class="max-w-3xl mx-auto space-y-4">
+    
+    <!-- HEADER CARD -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden google-forms-header transition-all duration-300">
+      <div class="bg-purple-100 p-6 border-b border-purple-200">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">ข้อสอบออนไลน์: การทำงานเป็นทีมและความยั่งยืนในที่ทำงาน</h1>
+        <p class="text-sm md:text-base text-gray-600 font-medium">แบบทดสอบวัดระดับความรู้ความเข้าใจสำหรับนักเรียนระดับประกาศนียบัตรวิชาชีพ (ปวช.)</p>
+      </div>
+      <div class="p-6 space-y-4">
+        <!-- Security Info Banner -->
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-md flex items-start gap-3">
+          <span class="text-red-500 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.088 5.502 2 6.002 2 6.5c0 5.14 3.038 9.574 7.375 11.538a1.2 1.2 0 001.25 0C14.962 16.074 18 11.64 18 6.5c0-.498-.088-.998-.166-1.5A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v5a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+          </span>
+          <div>
+            <h4 class="text-sm font-bold text-red-800">มาตรการรักษาความปลอดภัยขั้นสูง</h4>
+            <ul class="text-xs text-red-700 list-disc list-inside mt-1 space-y-1">
+              <li>จำกัดเวลาทำข้อสอบ <b>20 นาที</b> (ระบบจะส่งกระดาษคำตอบอัตโนมัติเมื่อหมดเวลา)</li>
+              <li>ทำข้อสอบได้เพียง <b>1 ครั้งต่อ 1 รหัสประจำตัว</b> เท่านั้น</li>
+              <li><b>ระบบไม่เฉลยคำตอบรายข้อหรือแสดงคำอธิบาย</b> เพื่อป้องกันการแคปภาพแจกคำตอบ</li>
+              <li>ระบบล็อกการคลิกขวาและป้องกันการคัดลอกข้อความโจทย์ข้อสอบ</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 text-xs md:text-sm text-gray-500 pt-2">
+          <span class="flex items-center gap-1 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full font-semibold">
+            🎯 จำนวน: 20 ข้อ
+          </span>
+          <span class="flex items-center gap-1 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full font-semibold">
+            🏆 เกณฑ์ผ่าน: 12 ข้อขึ้นไป (60%)
+          </span>
+          <span class="flex items-center gap-1 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full font-semibold">
+            ⏱️ เวลาทำสอบ: 20 นาที
+          </span>
+        </div>
+        <p class="text-xs text-red-500 font-semibold">* จำเป็นต้องตอบทุกข้อ</p>
+      </div>
+    </div>
+
+    <!-- STUDENT INFO CARD (Profile & Verification) -->
+    <div id="student-info-card" class="bg-white rounded-lg shadow-md p-6 border border-gray-200 transition-all duration-300">
+      <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+        👤 ข้อมูลผู้ทำข้อสอบ
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">ชื่อ - นามสกุล *</label>
+          <input type="text" id="student-name" placeholder="เด็กดี เรียนดี" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">เลขประจำตัวนักเรียน *</label>
+          <input type="text" id="student-id" placeholder="เช่น 691234" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+          <p id="checking-id-status" class="text-xs text-gray-400 mt-1 hidden">🔄 กำลังตรวจสอบสิทธิ์สอบ...</p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">ชั้นปี / ห้อง *</label>
+          <input type="text" id="student-class" placeholder="ปวช. 1/1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+        </div>
+      </div>
+      
+      <!-- Start Exam Button Control -->
+      <div id="start-exam-control" class="pt-4 border-t border-gray-100 text-center">
+        <button id="start-btn" type="button" onclick="startExam()" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-8 rounded-md shadow-md hover:shadow-lg transition-all duration-200 text-sm md:text-base cursor-pointer inline-flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          ยืนยันข้อมูลและเริ่มทำข้อสอบ
+        </button>
+        <p class="text-xs text-gray-500 mt-2">เมื่อกดปุ่มเริ่มทำข้อสอบ เวลาถอยหลังจะเริ่มนับทันที</p>
+      </div>
+    </div>
+
+    <!-- QUESTIONS CONTAINER (HIDDEN UNTIL STARTED) -->
+    <form id="quiz-form" class="space-y-4 hidden">
+      <div id="questions-root" class="space-y-4">
+        <!-- Questions dynamically loaded here -->
+      </div>
+
+      <!-- FORM ACTIONS -->
+      <div class="flex items-center justify-between pt-4 pb-12">
+        <button id="submit-btn" type="button" onclick="submitQuiz()" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-8 rounded-md shadow-md hover:shadow-lg transition-all duration-200 text-sm md:text-base cursor-pointer">
+          ส่งข้อสอบ (Submit)
+        </button>
+      </div>
+    </form>
+
+    <!-- RESULT MODAL / CONTAINER (HIDDEN UNTIL SUBMISSION) -->
+    <div id="result-container" class="hidden bg-white rounded-lg shadow-lg p-6 md:p-8 border-2 border-purple-500 animate-fade-in space-y-6">
+      <div class="text-center space-y-4 border-b border-gray-100 pb-6">
+        <div class="inline-flex items-center justify-center p-3 bg-green-100 rounded-full text-green-700 mb-2">
+          <!-- Shield Check SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900">บันทึกคะแนนสอบเรียบร้อยแล้ว</h2>
+        <p class="text-sm text-red-600 font-semibold">⚠️ ระบบได้จัดส่งข้อมูลคะแนนของท่านไปยังครูผู้สอนแล้ว และล็อกสิทธิ์การทำข้อสอบซ้ำ</p>
+        
+        <div class="p-4 bg-gray-50 rounded-lg inline-block text-left text-sm md:text-base space-y-1 text-gray-700 border border-gray-100">
+          <div><b>ชื่อผู้สอบ:</b> <span id="res-student-name"></span></div>
+          <div><b>รหัสประจำตัว:</b> <span id="res-student-id"></span></div>
+          <div><b>ระดับชั้น:</b> <span id="res-student-class"></span></div>
+        </div>
+        
+        <div class="py-4">
+          <p class="text-lg font-semibold text-gray-500">คะแนนรวมที่ได้</p>
+          <p class="text-5xl md:text-6xl font-black text-purple-700 my-2" id="score-text">0 / 20</p>
+          <div id="result-status-badge" class="inline-block px-4 py-2 rounded-full font-bold text-sm">
+            -
+          </div>
+        </div>
+      </div>
+
+      <!-- COPY RESULT BUTTON -->
+      <div class="flex flex-col items-center justify-center space-y-2 bg-purple-50 p-4 rounded-lg border border-purple-100">
+        <p class="text-xs md:text-sm text-purple-800 font-semibold text-center">โปรดคัดลอกรายงานผลนี้ส่งให้คุณครูเพื่อยืนยันคะแนนสอบ</p>
+        <button onclick="copyResultToClipboard()" class="bg-purple-700 hover:bg-purple-800 text-white font-semibold py-2 px-6 rounded-md shadow transition-all duration-200 text-sm flex items-center gap-2 cursor-pointer">
+          📋 คัดลอกรายงานคะแนน
+        </button>
+        <p id="copy-success-msg" class="text-xs text-green-600 font-semibold hidden">คัดลอกผลคะแนนเรียบร้อยแล้ว!</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Custom Alert Box Modal -->
+  <div id="custom-alert" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center gap-3 text-amber-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <h3 class="text-lg font-bold text-gray-900">แจ้งเตือนข้อมูล</h3>
+      </div>
+      <p id="custom-alert-msg" class="text-sm text-gray-600">กรุณากรอกข้อมูลส่วนตัวและตอบคำถามข้อที่ยังค้างคาไว้ให้เรียบร้อยด้วยนะคะ</p>
+      <div class="text-right">
+        <button onclick="closeAlert()" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded text-sm cursor-pointer">
+          เข้าใจแล้ว
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Duplicate Submission Block Modal -->
+  <div id="duplicate-block-modal" class="fixed inset-0 bg-black/75 hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg shadow-2xl max-w-lg w-full p-6 md:p-8 space-y-5 border-t-8 border-red-600">
+      <div class="flex items-center gap-3 text-red-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0-6V9m0-6H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-6z" />
+        </svg>
+        <h3 class="text-xl font-bold text-gray-900">ตรวจพบการทำซ้ำ!</h3>
+      </div>
+      <div class="space-y-3">
+        <p class="text-sm text-gray-600 leading-relaxed">
+          ขออภัยค่ะ รหัสประจำตัว <b id="block-student-id" class="text-red-600 text-base"></b> นี้ <span class="font-bold text-red-600">เคยส่งคำตอบวิชานี้เรียบร้อยแล้ว</span> ระบบจำกัดให้สามารถทำข้อสอบนี้ได้เพียง <b>1 ครั้งเท่านั้น</b> เพื่อความยุติธรรมในการสอบวัดผล
+        </p>
+        <div class="p-4 bg-gray-50 rounded-lg text-sm border border-gray-100">
+          <div class="font-semibold text-gray-700 mb-1">🎯 ประวัติการส่งคะแนนเดิม:</div>
+          <div class="text-gray-600">ชื่อผู้สอบ: <span id="block-student-name" class="font-medium text-gray-900"></span></div>
+          <div class="text-gray-600">คะแนนที่ได้: <b id="block-student-score" class="text-purple-700 text-base"></b></div>
+          <div class="text-gray-600">บันทึกเมื่อ: <span id="block-student-time"></span></div>
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="text-xs text-red-500 font-bold mb-3">⚠️ กรุณาติดต่อคุณครูผู้คุมสอบ หากท่านเห็นว่านี่คือข้อผิดพลาด</p>
+        <button onclick="clearBlockedStudent()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-8 rounded-md text-sm cursor-pointer transition-all duration-200">
+          แก้ไขรหัสประจำตัวอื่น
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase & Quiz App Logic module script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Global references and settings
+    let auth = null;
+    let db = null;
+    let user = null;
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'vocational-teamwork-quiz';
+
+    const quizData = [
+      {
+        q: "จุดเริ่มต้นของการพัฒนาตนเองอย่างยั่งยืนตามแนวคิด Ripple Effect (ปฏิกิริยาลูกโซ่) คือข้อใด?",
+        choices: [
+          "ก. การปรับปรุงความนิ่งและนิสัยจากภายในจิตใจตัวเอง",
+          "ข. การก้าวออกจากพื้นที่ปลอดภัย (Safe Zone) เพื่อทำสิ่งใหม่",
+          "ค. การออกไปทำงานร่วมกับสังคมและชุมชนภายนอก",
+          "ง. การขอความช่วยเหลือและคำแนะนำจากหัวหน้างาน"
+        ],
+        correct: 0,
+        feedback: "การพัฒนาที่ยั่งยืนเปรียบเหมือนคลื่นน้ำ (Ripple Effect) ที่ต้องเริ่มต้นสร้างความพร้อม ความนิ่ง และภูมิคุ้มกันจากภายในตัวเราก่อน จึงจะขยายผลไปสู่ทีมและสังคมภายนอกได้สำเร็จ"
+      },
+      {
+        q: "นิสัยภายใน 3 อย่างในข้อใด ที่ช่วยอัปเกรดความคิดวิเคราะห์และฝึกการดึงสติก่อนตัดสินใจเรื่องสำคัญ?",
+        choices: [
+          "ก. การพูดคุย, การนำเสนอ, การระดมสมอง",
+          "ข. การรักการอ่าน, การจดบันทึก, การทำสมาธิ",
+          "ค. การทำงานล่วงเวลา, การแข่งขัน, การแสดงออก",
+          "ง. การติดตามข่าวสาร, การประหยัดเงิน, การท่องเที่ยว"
+        ],
+        correct: 1,
+        feedback: "3 นิสัยง่าย ๆ แต่ทรงพลัง ได้แก่ การอ่าน (ช่วยเพิ่มความรู้และมุมมองวิเคราะห์), การจดบันทึก (ช่วยทบทวนการตัดสินใจในแต่ละวัน) และการทำสมาธิ (ช่วยรีเฟรชสมองและดึงสติ)"
+      },
+      {
+        q: "ข้อใดเป็นการก้าวออกจากพื้นที่ปลอดภัย (Safe Zone) ที่ถูกต้องและส่งผลดีต่อการเติบโตของนักเรียน ปวช.?",
+        choices: [
+          "ก. การลาออกจากโรงเรียนเพื่อไปลงทุนทำธุรกิจที่มีความเสี่ยงสูง",
+          "ข. การทำงานตามหน้าที่เดิมซ้ำ ๆ เพื่อหลีกเลี่ยงความผิดพลาด",
+          "ค. การกล้าลองทำสิ่งใหม่และเปิดรับ Feedback โดยเป็นกิจกรรมที่มีความเสี่ยงต่ำ",
+          "ง. การไม่รับฟังความคิดเห็นของผู้อื่นเพื่อป้องกันความสับสน"
+        ],
+        correct: 2,
+        feedback: "การก้าวออกจาก Safe Zone ที่ดีและเป็นตัวเร่งการเติบโต คือการกล้าเผชิญความกลัว ลองทำสิ่งใหม่ ๆ และรับฟังข้อเสนอแนะจากผู้อื่น โดยเลือกกิจกรรมที่มีโอกาสพัฒนาแต่ความเสี่ยงต่ำ"
+      },
+      {
+        q: "ในมิติของการพัฒนาชุมชนอย่างยั่งยืน 'มิติด้านสังคมและวัฒนธรรม' จะเติบโตได้ดีที่สุดภายใต้เงื่อนไขใด?",
+        choices: [
+          "ก. การยกเลิกวิถีชีวิตดั้งเดิมทั้งหมดแล้วเปลี่ยนเป็นเทคโนโลยีสมัยใหม่",
+          "ข. การรู้จักนำทุนดั้งเดิม เช่น ภูมิปัญญาท้องถิ่น มาผสมผสานเข้ากับเทคโนโลยีสมัยใหม่อย่างลงตัว",
+          "ค. การปิดกั้นชุมชนจากเทคโนโลยีภายนอกเพื่ออนุรักษ์วัฒนธรรมเก่าแก่",
+          "ง. การเน้นสร้างผลกำไรทางเศรษฐกิจเพียงอย่างเดียวโดยไม่สนใจวิถีชีวิตของคนในชุมชน"
+        ],
+        correct: 1,
+        feedback: "ชุมชนจะก้าวไปข้างหน้าอย่างฉลาดและยั่งยืนได้ก็ต่อเมื่อพวกเขารู้จักนำ 'ภูมิปัญญาดั้งเดิม' หรือ 'วิถีชีวิตท้องถิ่น' มาปรับใช้และผสมผสานร่วมกับเทคโนโลยีสมัยใหม่ได้อย่างลงตัว โดยไม่ลืมรากเหง้าของตนเอง"
+      },
+      {
+        q: "ทักษะความสัมพันธ์พื้นฐาน 3 ข้อที่จำเป็นอย่างยิ่งในการช่วยซัพพอร์ตให้คนทำงานรอดพ้นจากปัญหาในชีวิตจริงประกอบด้วยอะไรบ้าง?",
+        choices: [
+          "ก. ความเก่งกาจ, ความรวดเร็ว, ความอดทน",
+          "ข. การยอมรับความแตกต่าง, การเข้าใจความรู้สึกเอาใจเขามาใส่ใจเรา, ความจริงใจไม่มีหน้ากาก",
+          "ค. การประหยัดค่าใช้จ่าย, การมีเครือข่ายสังคม, การใช้เทคโนโลยีเก่ง",
+          "ง. การแข่งขันเอาชนะ, การพูดจาโน้มน้าวใจ, การวางตัวให้ดูเหนือกว่าผู้อื่น"
+        ],
+        correct: 1,
+        feedback: "ในชีวิตจริง คนเก่งอย่างเดียวรอดยาก หากไม่มีมิตรภาพที่ดีคอยซัพพอร์ต ซึ่งรากฐานสำคัญมี 3 ข้อคือ 1) ยอมรับและให้เกียรติคนอื่นในแบบที่เขาเป็น 2) เข้าใจความรู้สึกส่วนลึกแบบเอาใจเขามาใส่ใจเรา และ 3) มีความจริงใจต่อกันโดยไม่ใส่หน้ากากเข้าหากัน"
+      },
+      {
+        q: "การเปิดเผยตนเอง (Self-disclosure) ที่ดีเพื่อลดความเครียดและความเข้าใจผิดในระหว่างการฝึกงานควรเน้นที่เรื่องใด?",
+        choices: [
+          "ก. การเล่าปัญหาชีวิตส่วนตัวในอดีตอย่างละเอียดให้เพื่อนร่วมงานฟังทุกคน",
+          "ข. การเน้นบอกความรู้สึกหรือความคิดเห็นเกี่ยวกับสถานการณ์ที่เกิดขึ้นในปัจจุบัน",
+          "ค. การระบายความในใจและขุดเรื่องผิดพลาดในอดีตของเพื่อนร่วมงานขึ้นมาพูด",
+          "ง. การปิดบังความรู้สึกจริง ๆ เอาไว้แล้วแกล้งทำเป็นเห็นด้วยกับหัวหน้างานตลอดเวลา"
+        ],
+        correct: 1,
+        feedback: "การเปิดเผยตนเองในที่ทำงานควรโฟกัสเฉพาะสิ่งที่คิดหรือรู้สึกกับ 'เหตุการณ์ปัจจุบัน' เพื่อสื่อสารให้เข้าใจกันตรงจุด ไม่จำเป็นต้องขุดอดีตหรือเรื่องส่วนตัวที่ไม่มีความเกี่ยวข้องกับงานขึ้นมาพูด"
+      },
+      {
+        q: "ข้อใดสะท้อนธรรมชาติของ 'ความไว้วางใจ' (Trust) ในการทำงานร่วมกันได้ถูกต้องที่สุด?",
+        choices: [
+          "ก. เป็นสิ่งที่สร้างขึ้นมาได้ง่ายและไม่มีวันถูกทำลายลง",
+          "ข. สามารถซื้อได้ด้วยเงินหรือแลกเปลี่ยนด้วยตำแหน่งหน้าที่",
+          "ค. เป็นสิ่งที่เกิดขึ้นยาก แต่ถูกทำลายได้ง่ายมากเพียงแค่มีการโกหกหรือตุกติกเพียงครั้งเดียว",
+          "ง. เป็นสิ่งที่ไม่จำเป็นต้องมีในการทำงานร่วมกัน หากทุกคนทำงานเก่งอยู่แล้ว"
+        ],
+        correct: 2,
+        feedback: "ความไว้วางใจเปรียบเหมือนแก้วร้าวที่ต่อยังไงก็ไม่เนียนสนิท มันเป็นสิ่งที่ใช้เวลาสร้างนานและต้องยอมเปิดใจก่อน แต่หากมีการโกหกหรือทุจริตเพียงครั้งเดียว ความเชื่อใจจะพังทลายและกลายเป็นความระแวงทันที"
+      },
+      {
+        q: "ในทักษะการสื่อสารเพื่อความเข้าใจที่ดี (4 Steps) ขั้นตอนการ 'ทวนเนื้อความ' มีจุดประสงค์เพื่ออะไร?",
+        choices: [
+          "ก. เพื่อเป็นการจับผิดคำพูดของเพื่อนร่วมงาน",
+          "ข. เพื่อทบทวนและเช็กความเข้าใจในเนื้อหาให้ตรงกันระหว่างผู้พูดและผู้ฟัง",
+          "ค. เพื่อเลียนแบบน้ำเสียงและท่าทางของอีกฝ่าย",
+          "ง. เพื่อแสดงให้อีกฝ่ายเห็นว่าเรากำลังเบื่อการสนทนา"
+        ],
+        correct: 1,
+        feedback: "การทวนเนื้อความ (Paraphrasing) หลังจากฟังอย่างลึกซึ้ง มีประโยชน์เพื่อตรวจสอบความเข้าใจด้านข้อมูลให้ตรงกันก่อนที่จะทำการคุยในขั้นตอนต่อไป"
+      },
+      {
+        q: "เหตุใดการใช้ 'คำถามปลายเปิด' จึงมีประสิทธิภาพมากกว่าคำถามที่บังคับให้ตอบแค่ 'ใช่' หรือ 'ไม่ใช่' ในการทำงานร่วมกัน?",
+        choices: [
+          "ก. เพราะช่วยขยายประเด็น ทำให้อีกฝ่ายได้อธิบายความรู้สึกและไม่รู้สึกเหมือนโดนสอบสวน",
+          "ข. เพราะทำให้ประหยัดเวลาในการประชุมงานได้มากกว่า",
+          "ค. เพราะช่วยบังคับให้อีกฝ่ายตอบตามความต้องการของเราเสมอ",
+          "ง. เพราะทำให้ไม่ต้องสนใจน้ำเสียงหรืออารมณ์ของผู้ตอบ"
+        ],
+        correct: 0,
+        feedback: "คำถามปลายเปิด (เช่น เกิดอะไรขึ้น... หรือ รู้สึกอย่างไร...) จะช่วยเปิดโอกาสให้อีกฝ่ายเล่าแง่มุมและความรู้สึกที่แท้จริง ทำให้ผู้พูดไม่รู้สึกอึดอัดหรือเหมือนถูกสอบสวน"
+      },
+      {
+        q: "หลุมพรางตัวร้ายหรือพฤติกรรมในข้อใดที่เป็นเหมือน 'สนิมกัดกินทีมจากข้างใน' ทำให้ทีมพังลง?",
+        choices: [
+          "ก. การที่ทุกคนมีส่วนร่วมออกความคิดเห็นอย่างเท่าเทียมกัน",
+          "ข. การพูดคุยถกเถียงกันเรื่องงานด้วยเหตุผลและสุภาพ",
+          "ค. การแก่งแย่งชิงดีชิงเด่น ทุกคนอยากเป็นดาวเด่นเพียงดวงเดียวและปัดความรับผิดชอบ",
+          "ง. การพยายามปรับทัศนคติเข้าหากันเพื่อลดช่องว่างระหว่างวัย"
+        ],
+        correct: 2,
+        feedback: "การที่ทุกคนอยากเด่นอยู่คนเดียวชิงดีชิงเด่น นิ่งดูดาย และไม่ยอมรับความต่าง จะเป็นเหมือนสนิมกัดกินทีม ซึ่งแตกต่างจากทีมที่มีเป้าหมายร่วมกันและพร้อมจับมือพุ่งไปที่เส้นชัยพร้อมกัน"
+      },
+      {
+        q: "ข้อใดอธิบายแนวคิดเรื่อง 'ภาวะผู้นำร่วม' (Shared Leadership) ในทีมได้อย่างถูกต้อง?",
+        choices: [
+          "ก. การให้สมาชิกทุกคนผลัดกันเป็นผู้สั่งการควบคุมผู้ดูแลในแต่ละวัน",
+          "ข. สมาชิกทุกคนมีวิญญาณความเป็นผู้นำ กล้าคิดกล้าตัดสินใจในพื้นที่งานของตนเองโดยไม่ต้องรอคำสั่งตลอดเวลา",
+          "ค. การไม่มีหัวหน้าทีมเลย และปล่อยให้ทุกคนทำงานตามใจชอบโดยไม่มีขอบเขต",
+          "ง. การมอบหมายหน้าที่การตัดสินใจทั้งหมดให้หัวหน้าทีมเพียงคนเดียวดูแล"
+        ],
+        correct: 1,
+        feedback: "ภาวะผู้นำร่วม (Shared Leadership) คือการปลดล็อกให้สมาชิกทุกคนมีสิทธิ์คิด มีสิทธิ์เสนอ และกล้ารับผิดชอบกล้าตัดสินใจในขอบเขตงานของตนเอง ทำให้ทีมขยับตัวและบินได้เร็วขึ้น"
+      },
+      {
+        q: "นิยามคำว่า 'ความยั่งยืน' (Sustainability) ในบริบทสากลและการทำงานร่วมกันหมายถึงอะไร?",
+        choices: [
+          "ก. การหาเงินและใช้ทรัพยากรให้มากที่สุดในวันนี้เพื่อความร่ำรวยรวดเร็ว",
+          "ข. การประหยัดเงินค่าใช้จ่ายทุกอย่างของบริษัทจนไม่เกิดการพัฒนาอสังหาริมทรัพย์หรือธุรกิจ",
+          "ค. การอยู่รอดและตอบสนองความต้องการในวันนี้ โดยไม่ทำลายโอกาสและทรัพยากรของคนรุ่นหลังในวันข้างหน้า",
+          "ง. การอนุรักษ์ธรรมชาติไว้ 100% โดยหยุดกระบวนการผลิตและอุตสาหกรรมทั้งหมด"
+        ],
+        correct: 2,
+        feedback: "ความยั่งยืนไม่ใช่การหยุดพัฒนา แต่คือการสร้างสมดุลให้เราอยู่รอดได้ในวันนี้ มีงาน มีรายได้ โดยที่การทำงานของเราต้องไม่ไปผลาญทรัพยากรหรือทำลายธรรมชาติจนคนรุ่นลูกรุ่นหลานไม่เหลืออะไรใช้ในอนาคต"
+      },
+      {
+        q: "การประเมินผลสัมฤทธิ์ขององค์กรตามหลัก 'Triple Bottom Line' มุ่งเน้นสร้างสมดุลใน 3 ด้านใดบ้าง?",
+        choices: [
+          "ก. รายได้ของเจ้าของ, เงินโบนัสผู้บริหาร, ค่าแรงพนักงาน",
+          "ข. เทคโนโลยีล้ำสมัย, จำนวนสาขาบริษัท, ปริมาณสินค้าที่ผลิตได้",
+          "ค. เศรษฐกิจมีผลกำไร (Profit), สังคมเป็นธรรมคนอยู่ดีมีสุข (People), สิ่งแวดล้อมไม่พังพินาศ (Planet)",
+          "ง. แผนการตลาดที่ดี, ยอดขายสินค้าออนไลน์, การประชาสัมพันธ์องค์กร"
+        ],
+        correct: 2,
+        feedback: "Triple Bottom Line คือสมดุล 3 ประสาน ได้แก่ Profit (เศรษฐกิจมีกำไรเพื่อหล่อเลี้ยงธุรกิจ), People (คนในสังคมได้รับความเป็นธรรมไม่ถูกเอาเปรียบ) และ Planet (ธรรมชาติรอบตัวไม่เสียหายจากการทำงาน)"
+      },
+      {
+        q: "ในกรอบความคิด 5Ps ของเป้าหมาย SDGs ตัว P ที่ชื่อว่า 'Prosperity' (ความมั่งคั่ง) มุ่งเน้นการพัฒนาในเรื่องใด?",
+        choices: [
+          "ก. การศึกษาที่มีคุณภาพและการขจัดความยากจนของประชากร",
+          "ข. การรักษาระบบนิเวศทางบก แหล่งน้ำ และการจัดการขยะ",
+          "ค. สันทีภาพ ความยุติธรรม และสังคมที่ไม่มีการทุจริตคอร์รัปชัน",
+          "ง. การทำงานที่ดีมีคุณค่า การมีพลังงานสะอาดใช้ และการสร้างนวัตกรรมใหม่ ๆ"
+        ],
+        correct: 3,
+        feedback: "Prosperity หมายถึงความเจริญรุ่งเรืองทางเศรษฐกิจ ซึ่งสอดคล้องกับ SDGs ในกลุ่มงานที่ดีมีคุณค่า (Decent Work), พลังงานสะอาดเข้าถึงได้ และโครงสร้างพื้นฐานนวัตกรรม"
+      },
+      {
+        q: "แนวคิด 'ไม่ทิ้งใครไว้ข้างหลัง' (Leave no one behind) ในเรื่องความยั่งยืน ให้ความสำคัญกับกลุ่มคนใดมากที่สุด?",
+        choices: [
+          "ก. กลุ่มลูกค้ารายใหญ่ที่สร้างกำไรสูงสุดให้แก่บริษัทเท่านั้น",
+          "ข. พนักงานระดับบริหารที่มีตำแหน่งและเงินเดือนสูงที่สุดในองค์กร",
+          "ค. คนตัวเล็ก ๆ คนยากจน หรือกลุ่มเปราะบางในสังคมที่มักถูกมองข้าม",
+          "ง. นักลงทุนจากต่างประเทศที่นำเงินเข้ามาช่วยเหลือองค์กร"
+        ],
+        correct: 2,
+        feedback: "หัวใจของความยั่งยืนคือความครอบคลุม (Inclusiveness) ซึ่งมุ่งเป้าปกป้องและพัฒนาคุณภาพชีวิตของคนตัวเล็ก ๆ หรือกลุ่มเปราะบางในสังคมให้เดินหน้าไปพร้อมกัน โดยไม่ถูกละทิ้งไว้ข้างหลัง"
+      },
+      {
+        q: "ตัวอย่างในข้อใดที่สะท้อนหลักการสำคัญเรื่อง 'Integrated' (บูรณาการเชื่อมโยงกัน) ของความยั่งยืนได้ชัดเจนที่สุด?",
+        choices: [
+          "ก. พนักงานออฟฟิศช่วยกันประหยัดไฟฟ้า ซึ่งช่วยลดต้นทุนของบริษัทและลดสภาวะโลกร้อนไปพร้อมกัน",
+          "ข. การที่ฝ่ายไอทีแก้ปัญหาระบบคอมพิวเตอร์โดยไม่ได้แจ้งให้ฝ่ายอื่นทราบ",
+          "ค. การทำกิจกรรมเพื่อสังคม (CSR) เพียงปีละครั้งเพื่อเป้าหมายการโฆษณาบริษัท",
+          "ง. การแยกกันทำงานของแต่ละแผนกโดยไม่มีการแชร์ข้อมูลทรัพยากรร่วมกัน"
+        ],
+        correct: 0,
+        feedback: "Integrated คือหลักการที่มองว่าทุกมิติเชื่อมโยงถึงกันหมด การลงมือทำสิ่งหนึ่ง (เช่น ประหยัดพลังงาน) จะส่งผลดีทั้งมิติด้านเศรษฐกิจ (ลดค่าใช้จ่ายบริษัท) และมิติด้านสิ่งแวดล้อม (ลดการปล่อยคาร์บอน) ไปพร้อม ๆ กัน"
+      },
+      {
+        q: "การดำเนินงานด้านความยั่งยืนในที่ทำงานตามหลักสากล มีผู้เกี่ยวข้องหลัก (Major Groups) ร่วมขับเคลื่อนทั้งหมดกี่กลุ่ม?",
+        choices: [
+          "ก. 3 กลุ่มย่อย",
+          "ข. 5 กลุ่มย่อย",
+          "ค. 9 กลุ่มหลัก",
+          "ง. 17 กลุ่มหลัก"
+        ],
+        correct: 2,
+        feedback: "เรื่องความยั่งยืนไม่ได้พึ่งพารัฐบาลอย่างเดียว แต่มีกลไกผู้ขับเคลื่อนทั้งหมด 9 กลุ่มหลัก (9 Major Groups) ซึ่งรวมถึงภาคธุรกิจ เกษตรกร เยาวชน และแรงงาน (พวกเราทุกคน)"
+      },
+      {
+        q: "กลไกสนับสนุน 3 ด้านที่จะช่วยนำพาออฟฟิศหรือโรงงานฝึกงานไปสู่เป้าหมายความยั่งยืนประกอบด้วยอะไรบ้าง?",
+        choices: [
+          "ก. เงินทุน, เทคโนโลยี/นวัตกรรมใหม่, การสร้างขีดความสามารถ (Capacity Building)",
+          "ข. การโฆษณา, การจัดโปรโมชันลดราคา, การเพิ่มจำนวนพนักงาน",
+          "ค. กฎระเบียบบริษัทที่เข้มงวด, การลงโทษทางวินัย, การเลิกจ้างพนักงาน",
+          "ง. การใช้อำนาจสั่งการจากผู้บริหาร, การย้ายสาขาธุรกิจ, การกู้ยืมเงินทุน"
+        ],
+        correct: 0,
+        feedback: "3 กลไกสนับสนุนหลัก ได้แก่ 1) เงินทุน (จัดสรรงบประมาณดำเนินโครงการรักษ์โลก) 2) เทคโนโลยี (นำนวัตกรรมสีเขียวมาลดมลพิษ) และ 3) การสร้างขีดความสามารถ (Capacity Building/Upskill เพิ่มความรู้ให้พนักงาน)"
+      },
+      {
+        q: "การทำงานแบบ 'มืออาชีพ' (Professional) ที่สอดคล้องกับความยั่งยืนตามนิยามสรุปท้ายบทเรียนคืออะไร?",
+        choices: [
+          "ก. การทำงานให้เสร็จเร็วที่สุดโดยไม่ต้องสนใจความต้องการของเพื่อนร่วมงาน",
+          "ข. การมีความรับผิดชอบต่อตนเอง ใส่ใจดูแลเพื่อนร่วมงาน และร่วมกันดูแลรักษาสิ่งแวดล้อมไปพร้อม ๆ กัน",
+          "ค. การทำงานเก่งเพียงลำพังเพื่อหาผลงานเลื่อนตำแหน่งให้เร็วที่สุด",
+          "ง. การทำงานตามคำสั่งของหัวหน้าโดยปฏิเสธการเรียนรู้ทักษะใหม่ ๆ"
+        ],
+        correct: 1,
+        feedback: "ความเป็นมืออาชีพที่ยั่งยืนคือ การมีความรับผิดชอบต่อตัวเอง (รับผิดชอบงานตน) ดูแลเพื่อนร่วมงาน (ซัพพอร์ตกัน) และรับผิดชอบสิ่งแวดล้อมรอบตัวไปพร้อมกัน"
+      },
+      {
+        q: "ในฐานะนักเรียน ปวช. ที่กำลังไปฝึกงาน ข้อใดคือพฤทีกรรม 'การมีส่วนร่วมในเป้าหมาย SDGs' ที่ทำได้ง่ายที่สุดในแผนก?",
+        choices: [
+          "ก. การขอเสนออนุมัติงบประมาณหลักล้านบาทเพื่อติดตั้งแผงโซลาร์เซลล์ของบริษัท",
+          "ข. การเข้าร่วมและช่วยคัดแยกขยะในออฟฟิศ พร้อมทั้งปิดสวิตช์ไฟ/เครื่องปรับอากาศเมื่อไม่ใช้งาน",
+          "ค. การร่างจดหมายร้องเรียนรัฐบาลเรื่องนโยบายการจัดการขยะของประเทศ",
+          "ง. การเลิกใช้กระดาษและปฏิเสธการพิมพ์เอกสารทุกชนิดในที่ทำงานทันที"
+        ],
+        correct: 1,
+        feedback: "นักเรียนฝึกงานสามารถมีส่วนร่วมกับ SDGs ได้ทันทีผ่านการกระทำเล็ก ๆ แต่สร้างนิสัยที่ดี เช่น การคัดแยกขยะ (SDG 12) และการช่วยประหยัดพลังงานในแผนก (SDG 7 และ 13) ซึ่งทำได้ง่ายและเห็นผลเป็นรูปธรรมที่สุด"
+      }
+    ];
+
+    let userAnswers = {};
+    let examTimer = null;
+    let timeLeft = 1200; // 20 minutes in seconds
+
+    // Anti-Right Click Prevention
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      showAlert("⚠️ ไม่สามารถคลิกขวาในหน้าระบบการสอบนี้ได้ เพื่อความปลอดภัยของข้อมูลข้อสอบค่ะ");
+    });
+
+    // Initialize Firebase
+    async function initFirebase() {
+      if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+        console.log("Firebase config not available. Fallback to storage session.");
+        return;
+      }
+      try {
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+
+        // Authenticate anonymously or custom token
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        onAuthStateChanged(auth, (u) => {
+          user = u;
+        });
+      } catch (err) {
+        console.error("Firebase startup failed:", err);
+      }
+    }
+
+    // Check if user already took quiz
+    async function verifySubmission(studentId) {
+      if (!studentId) return null;
+
+      if (db && user) {
+        try {
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'submissions', studentId);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            return docSnap.data();
+          }
+        } catch (err) {
+          console.error("Database query error:", err);
+        }
+      }
+
+      const localData = JSON.parse(sessionStorage.getItem('local_submissions') || '{}');
+      if (localData[studentId]) {
+        return localData[studentId];
+      }
+
+      return null;
+    }
+
+    // Handle check during ID typing
+    async function checkExistingSubmission() {
+      const sId = document.getElementById('student-id').value.trim();
+      if (!sId) return;
+
+      const statusIndicator = document.getElementById('checking-id-status');
+      statusIndicator.classList.remove('hidden');
+
+      const existingRecord = await verifySubmission(sId);
+      statusIndicator.classList.add('hidden');
+
+      if (existingRecord) {
+        document.getElementById('block-student-id').innerText = sId;
+        document.getElementById('block-student-name').innerText = existingRecord.name;
+        document.getElementById('block-student-score').innerText = existingRecord.score;
+        document.getElementById('block-student-time').innerText = existingRecord.submittedAt;
+        document.getElementById('duplicate-block-modal').classList.remove('hidden');
+      }
+    }
+
+    // Save record to DB or storage
+    async function saveSubmission(studentId, submissionData) {
+      if (db && user) {
+        try {
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'submissions', studentId);
+          await setDoc(docRef, submissionData);
+          return true;
+        } catch (err) {
+          console.error("Failed saving to DB:", err);
+        }
+      }
+
+      const localData = JSON.parse(sessionStorage.getItem('local_submissions') || '{}');
+      localData[studentId] = submissionData;
+      sessionStorage.setItem('local_submissions', JSON.stringify(localData));
+      return true;
+    }
+
+    // Start Exam Action
+    async function startExam() {
+      const name = document.getElementById('student-name').value.trim();
+      const id = document.getElementById('student-id').value.trim();
+      const sClass = document.getElementById('student-class').value.trim();
+
+      if (!name || !id || !sClass) {
+        showAlert("กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วนก่อนเข้าทำข้อสอบนะคะ");
+        return;
+      }
+
+      // Final pre-flight duplication check
+      const checkDouble = await verifySubmission(id);
+      if (checkDouble) {
+        document.getElementById('block-student-id').innerText = id;
+        document.getElementById('block-student-name').innerText = checkDouble.name;
+        document.getElementById('block-student-score').innerText = checkDouble.score;
+        document.getElementById('block-student-time').innerText = checkDouble.submittedAt;
+        document.getElementById('duplicate-block-modal').classList.remove('hidden');
+        return;
+      }
+
+      // Freeze Profile Fields
+      document.getElementById('student-name').disabled = true;
+      document.getElementById('student-id').disabled = true;
+      document.getElementById('student-class').disabled = true;
+      document.getElementById('start-exam-control').classList.add('hidden');
+
+      // Reveal Questions Form & Sticky Bar
+      document.getElementById('quiz-form').classList.remove('hidden');
+      document.getElementById('sticky-timer-bar').classList.remove('hidden');
+      document.body.style.paddingTop = "50px"; // Give space for timer bar
+
+      // Start Timer Loop
+      timeLeft = 1200; // 20 mins
+      updateTimerDisplay();
+      examTimer = setInterval(updateTimerTick, 1000);
+
+      // Scroll to first question
+      document.getElementById('questions-root').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateTimerTick() {
+      if (timeLeft <= 0) {
+        clearInterval(examTimer);
+        autoSubmitByTimeout();
+      } else {
+        timeLeft--;
+        updateTimerDisplay();
+      }
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      const formattedMin = String(minutes).padStart(2, '0');
+      const formattedSec = String(seconds).padStart(2, '0');
+      document.getElementById('countdown-timer').innerText = `${formattedMin}:${formattedSec}`;
+
+      // Change background color to darker red when less than 2 minutes left
+      if (timeLeft < 120) {
+        document.getElementById('sticky-timer-bar').className = "fixed top-0 left-0 w-full bg-red-700 text-white text-center py-2.5 font-bold z-40 shadow-md flex items-center justify-center gap-2 animate-pulse";
+      }
+    }
+
+    // Automatically submit when time is up
+    function autoSubmitByTimeout() {
+      showAlert("⏱️ หมดเวลาในการทำข้อสอบแล้ว! ระบบกำลังดำเนินการรวบรวมคำตอบและบันทึกคะแนนสอบของคุณอัตโนมัติ...");
+      setTimeout(() => {
+        executeSubmission(true);
+      }, 2000);
+    }
+
+    // Manual or automatic submission logic handler
+    async function executeSubmission(isTimeout = false) {
+      if (examTimer) clearInterval(examTimer);
+      document.getElementById('sticky-timer-bar').classList.add('hidden');
+      document.body.style.paddingTop = "0";
+
+      const name = document.getElementById('student-name').value.trim();
+      const id = document.getElementById('student-id').value.trim();
+      const sClass = document.getElementById('student-class').value.trim();
+
+      // 1. Calculate Scores and disable inputs (NO color-coding or feedback shown)
+      let correctCount = 0;
+      const totalQ = quizData.length;
+
+      quizData.forEach((qObj, index) => {
+        const uAnsIdx = userAnswers[index];
+        if (uAnsIdx === qObj.correct) {
+          correctCount++;
+        }
+
+        const card = document.getElementById(`q-card-${index}`);
+        const labels = card.querySelectorAll('label');
+        
+        // Disable inputs but keep selection visible (WITHOUT showing correct/incorrect green/red markers)
+        labels.forEach((label, lIdx) => {
+          const radio = label.querySelector('input');
+          if (radio) radio.disabled = true;
+          label.style.cursor = 'default';
+          
+          // Neutral grey border style to show choice but no status indicator
+          if (lIdx === uAnsIdx) {
+            label.className = "flex items-center gap-3 p-3 border-2 border-purple-400 bg-purple-50 rounded-lg text-sm md:text-base font-semibold";
+          } else {
+            label.className = "flex items-center gap-3 p-3 border border-gray-100 bg-gray-50 text-gray-400 rounded-lg text-sm md:text-base";
+          }
+        });
+      });
+
+      // 2. Prepare & Save records
+      const timestamp = new Date().toLocaleString('th-TH');
+      const submissionRecord = {
+        name: name,
+        studentClass: sClass,
+        score: `${correctCount} / ${totalQ}`,
+        submittedAt: timestamp
+      };
+
+      await saveSubmission(id, submissionRecord);
+
+      // 3. Hide submission actions
+      document.getElementById('student-info-card').classList.add('opacity-75');
+      document.getElementById('submit-btn').classList.add('hidden');
+
+      // 4. Fill and display Result panel (Only Score is shown!)
+      document.getElementById('res-student-name').innerText = name;
+      document.getElementById('res-student-id').innerText = id;
+      document.getElementById('res-student-class').innerText = sClass;
+      document.getElementById('score-text').innerText = `${correctCount} / ${totalQ}`;
+
+      const statusBadge = document.getElementById('result-status-badge');
+      if (correctCount >= 12) {
+        statusBadge.className = "inline-block px-4 py-2 rounded-full font-bold text-sm bg-green-100 text-green-800 border border-green-200";
+        statusBadge.innerText = "🏆 ผ่านเกณฑ์การสอบวัดระดับ";
+      } else {
+        statusBadge.className = "inline-block px-4 py-2 rounded-full font-bold text-sm bg-red-100 text-red-800 border border-red-200";
+        statusBadge.innerText = "⚠️ ยังไม่ผ่านเกณฑ์ 12 คะแนน";
+      }
+
+      const resContainer = document.getElementById('result-container');
+      resContainer.classList.remove('hidden');
+      resContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Triggered by "Submit" Button click
+    async function submitQuiz() {
+      // Validate that all questions are answered
+      const totalQ = quizData.length;
+      const answeredCount = Object.keys(userAnswers).length;
+
+      if (answeredCount < totalQ) {
+        showAlert(`⚠️ กรุณาตอบข้อสอบให้ครบทุกข้อค่ะ (ขณะนี้ตอบไปแล้ว ${answeredCount} จากทั้งหมด ${totalQ} ข้อ) เพื่อรักษาสิทธิ์คะแนนสูงสุดของคุณครูนะคะ`);
+        return;
+      }
+
+      executeSubmission(false);
+    }
+
+    // Dynamic rendering of questions
+    window.onload = async function() {
+      await initFirebase();
+      
+      const root = document.getElementById('questions-root');
+      root.innerHTML = ''; // Clear loading state
+
+      quizData.forEach((qObj, index) => {
+        const qNumber = index + 1;
+        const card = document.createElement('div');
+        card.id = `q-card-${index}`;
+        card.className = "bg-white rounded-lg shadow-md p-6 border border-gray-200 transition-all duration-300";
+
+        // Title
+        const titleEl = document.createElement('h3');
+        titleEl.className = "text-base md:text-lg font-bold text-gray-900 mb-4 flex items-start gap-2";
+        titleEl.innerHTML = `
+          <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded">ข้อ ${qNumber}</span>
+          <span>${qObj.q}</span>
+        `;
+        card.appendChild(titleEl);
+
+        // Choices
+        const choicesGrid = document.createElement('div');
+        choicesGrid.className = "space-y-3";
+
+        qObj.choices.forEach((choice, choiceIdx) => {
+          const label = document.createElement('label');
+          label.className = "flex items-center gap-3 p-3 border border-gray-100 rounded-lg cursor-pointer hover:bg-purple-50 transition-all duration-150 text-sm md:text-base";
+          
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `question-${index}`;
+          radio.value = choiceIdx;
+          radio.className = "w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500";
+          
+          radio.addEventListener('change', () => {
+            userAnswers[index] = choiceIdx;
+            const siblings = choicesGrid.querySelectorAll('label');
+            siblings.forEach(sib => sib.classList.remove('bg-purple-100', 'border-purple-300', 'font-semibold'));
+            label.classList.add('bg-purple-100', 'border-purple-300', 'font-semibold');
+          });
+
+          label.appendChild(radio);
+          
+          const textNode = document.createElement('span');
+          textNode.innerText = choice;
+          label.appendChild(textNode);
+          
+          choicesGrid.appendChild(label);
+        });
+
+        card.appendChild(choicesGrid);
+        root.appendChild(card);
+      });
+
+      document.getElementById('student-id').addEventListener('blur', checkExistingSubmission);
+    };
+
+    function showAlert(msg) {
+      document.getElementById('custom-alert-msg').innerText = msg;
+      document.getElementById('custom-alert').classList.remove('hidden');
+    }
+
+    function closeAlert() {
+      document.getElementById('custom-alert').classList.add('hidden');
+    }
+
+    function clearBlockedStudent() {
+      document.getElementById('duplicate-block-modal').classList.add('hidden');
+      const idInput = document.getElementById('student-id');
+      idInput.value = '';
+      idInput.focus();
+    }
+
+    function copyResultToClipboard() {
+      const name = document.getElementById('student-name').value.trim();
+      const id = document.getElementById('student-id').value.trim();
+      const sClass = document.getElementById('student-class').value.trim();
+      const score = document.getElementById('score-text').innerText;
+      const passText = (parseInt(score) >= 12) ? "ผ่านเกณฑ์การสอบวัดระดับ ✅" : "ยังไม่ผ่านเกณฑ์การสอบวัดระดับ ❌";
+
+      const textToCopy = `📋 รายงานคะแนนสอบวิชาการทำงานเป็นทีมและความยั่งยืน (ปวช.)
+---------------------------------
+ผู้ทำสอบ: ${name}
+รหัสประจำตัว: ${id}
+ห้องเรียน: ${sClass}
+ส่งผลสำเร็จเมื่อวันที่: ${new Date().toLocaleDateString('th-TH')}
+ผลการสอบที่บันทึกได้: ${score} คะแนน
+ผลลัพธ์: ${passText}
+(ข้อมูลถูกเข้ารหัสและรักษาความปลอดภัยโดยระบบคลาวด์ ป้องกันการดัดแปลงแก้ไข)
+---------------------------------`;
+
+      const tempTextArea = document.createElement("textarea");
+      tempTextArea.value = textToCopy;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          const successMsg = document.getElementById('copy-success-msg');
+          successMsg.classList.remove('hidden');
+          setTimeout(() => {
+            successMsg.classList.add('hidden');
+          }, 3000);
+        }
+      } catch (err) {
+        console.error("Error executing copy command:", err);
+      }
+      
+      document.body.removeChild(tempTextArea);
+    }
+
+    // Expose modular functions to global window context
+    window.startExam = startExam;
+    window.submitQuiz = submitQuiz;
+    window.closeAlert = closeAlert;
+    window.clearBlockedStudent = clearBlockedStudent;
+    window.copyResultToClipboard = copyResultToClipboard;
+  </script>
+</body>
+</html>
